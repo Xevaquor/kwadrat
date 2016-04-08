@@ -1,8 +1,8 @@
 import app
 from app.model.user import User
 
-#app.db.drop_all()
-#app.db.create_all()
+app.db.drop_all()
+app.db.create_all()
 
 print(app.db)
 
