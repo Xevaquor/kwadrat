@@ -2,7 +2,6 @@ from flask import Blueprint, request, render_template, flash, g, session, redire
 
 from app import db
 
-from app.mod_user.models import
 
 mod_user = Blueprint('user', __name__, url_prefix='/user')
 

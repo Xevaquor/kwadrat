@@ -14,3 +14,7 @@ def not_found(error):
 #from app.mod_user.controllers import mod_user as user_module
 
 #app.register_blueprint(user_module)
+
+from app.mod_offer.controller import mod_offer as offer_module
+
+app.register_blueprint(offer_module)

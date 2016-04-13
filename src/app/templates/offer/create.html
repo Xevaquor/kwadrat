@@ -1,0 +1,17 @@
+{% block content %}
+
+    <form action="" method="post" name="create_offer">
+        {{ form.hidden_tag() }}
+        <label>Ulica {{ form.street }}  </label>
+        <label>Nr domu {{ form.house_number }}  </label>
+        <label>Nr mieszkania {{ form.apartment_number }}  </label>
+        <label> {{ form.room_count }}  </label>
+        <label> {{ form.area }}  </label>
+        <label> {{ form.tier_count }}  </label>
+        <label> {{ form.has_balcony }}  </label>
+        <label> {{ form.description }}  </label>
+        <label> {{ form.price    }}  </label>
+        <label><input type="submit" value="Opublikuj"></label>
+    </form>
+
+{% endblock %}
