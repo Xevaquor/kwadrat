@@ -6,7 +6,7 @@ import base64
 
 
 class PasswordUtil(object):
-    _SHA_ITERATIONS = 10 ** 6
+    _SHA_ITERATIONS = 10 ** 4
 
     def generate_salt(self) -> str:
         salt = random.SystemRandom().getrandbits(8 * 64)

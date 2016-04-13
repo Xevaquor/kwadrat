@@ -6,7 +6,8 @@ class Offer(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     city = db.Column(db.Unicode(64), nullable=False)
     street = db.Column(db.Unicode(128), nullable=False)
-    house_number = db.Column(db.Integer, nullable=False)
+    # TODO:
+    building_number = db.Column(db.String(5), nullable=False)
     apartment_number = db.Column(db.Integer, nullable=True)
     room_count = db.Column(db.Integer, nullable=False)
     area = db.Column(db.Integer, nullable=False)
@@ -15,8 +16,8 @@ class Offer(db.Model):
     description = db.Column(db.Unicode(16 * 1024), nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
-    utc_publish_date = db.Column(db.Date, nullable=False)
-    utc_sold_date = db.Column(db.Date, nullable=True)
+    utc_publish_date = db.Column(db.DateTime, nullable=False)
+    utc_sold_date = db.Column(db.DateTime, nullable=True)
     is_sold = db.Column(db.Boolean, nullable=False)
 
     @staticmethod
