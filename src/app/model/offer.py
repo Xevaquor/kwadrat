@@ -3,7 +3,7 @@ from app import db
 
 class Offer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, index=True)
     city = db.Column(db.Unicode(64), nullable=False)
     street = db.Column(db.Unicode(128), nullable=False)
     # TODO:
@@ -24,3 +24,10 @@ class Offer(db.Model):
     def Create(owner_id, city, street, house_number, apartment_number, room_count,
                area, tier_count, has_balcony, description, price):
         pass
+
+
+class Photo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String, nullable=False)
+    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'), index=True)
+    is_main = db.Column(db.Boolean, nullable=False)

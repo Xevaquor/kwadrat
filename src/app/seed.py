@@ -1,6 +1,6 @@
 import app
 from app.model.user import User, Message
-from app.model.offer import Offer
+from app.model.offer import Offer, Photo
 from faker import Factory
 from app.pass_utils import PasswordUtil
 import random
@@ -63,12 +63,7 @@ for _ in range(AMOUNT_OF_OFFERS):
     offer.room_count = random.randint(1, 7)
     offer.street = fake.street_name()
     offer.tier_count = random.randint(1,3)
-
-    d = fake.date_time_this_year()
-
     offer.utc_publish_date = datetime.datetime.now()
-
-
 
     app.db.session.add(offer)
 
