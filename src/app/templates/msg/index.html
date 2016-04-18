@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{%   block body %}
+
+<article>
+    {% for msg in messages %}<p>
+    {% if not msg.is_read %}NEW{% endif %}
+    <a href="{{ url_for('msg.show',id=msg.id) }}" >{{ msg.sent_datetime }}  {{ msg.from.email }} {{ msg.from.phone }}</a></p>
+    {% endfor %}
+</article>
+
+{% endblock %}

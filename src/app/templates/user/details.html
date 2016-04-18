@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <article>
+    <p>{{ user.email }}</p>
+    <p>{{ user.phone }}</p>
+    </article>
+
+    <form action="{{ url_for('user.delete', id=user.id) }}" method="post">
+        <button type="submit">USUŃ KONTO</button>
+    </form>
+
+    <form action="{{ url_for('user.set_password', id=user.id) }}" method="post">
+        <fieldset>
+            <ul>
+                <li>
+                    <label for="password">Nowe hasło</label>
+                    <input id="password" type="password" name="password" >
+                </li>
+                <li>
+                    <label for="password_confirmation">Potwierdź hasło</label>
+                    <input id="password_confirmation" type="password" name="password_confirmation" >
+                </li>
+            </ul>
+            <button type="submit">Zmień hasło</button>
+        </fieldset>
+    </form>
+
+{% endblock %}

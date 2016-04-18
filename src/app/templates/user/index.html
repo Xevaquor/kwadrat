@@ -1,1 +1,13 @@
-user index
+{% extends 'layout.html' %}
+{%   block body %}
+
+<article>
+    {% for user in users %}a
+    <p>{{ user.email }} {{ user.phone }}
+    {% if user.is_admin %} ADMINISTRATOR {% endif %}
+    <a href="{{ url_for('user.get', id=user.id) }}">Szczegóły</a>
+    </p>
+    {% endfor %}
+</article>
+
+{% endblock %}

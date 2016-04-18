@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<title>My Application</title>
 </head>
 <body>
+<header>
+    {% if 'username' in session %} Zalogowany jako {{ session.username }} {% endif %}
+</header>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
 </body>
-</html>

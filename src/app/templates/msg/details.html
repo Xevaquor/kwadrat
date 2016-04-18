@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block body %}
+<article>
+    {{ message.from.email }}
+<p>
+    {{ message.phone }}
+</p>
+        <form action="{{ url_for('msg.delete', id=message.id) }}" method="post">
+        <button type="submit">USUŃ WIADOMOŚĆ</button>
+    </form>
+
+
+</article>
+
+{% endblock %}

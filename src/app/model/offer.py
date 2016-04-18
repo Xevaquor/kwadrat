@@ -2,6 +2,8 @@ from app import db
 
 
 class Offer(db.Model):
+    __tablename__ = 'offer'
+
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, index=True)
     city = db.Column(db.Unicode(64), nullable=False)

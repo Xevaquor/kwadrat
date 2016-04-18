@@ -5,6 +5,7 @@ from app.mod_offer.forms import CreateOfferForm
 from app import db
 
 from app.model import offer
+from app.model.offer import Offer
 
 mod_offer = Blueprint('offer', __name__, url_prefix='/offer')
 
@@ -18,10 +19,12 @@ def index():
 def create():
     return '201'
 
+
 @mod_offer.route('/create/', methods=['GET'])
 def create_form():
     form = CreateOfferForm()
     return render_template('offer/create.html', form=form)
+
 
 @mod_offer.route('/<int:offer_id>/', methods=['GET'])
 def show_offer(offer_id=None):
@@ -29,3 +32,11 @@ def show_offer(offer_id=None):
         abort(404)
     else:
         return render_template('offer/show.html')
+
+
+@mod_offer.route('/search/', methods=['GET'])
+def search():
+    bn = request.args.get('building_number')
+    results = Offer.query.filter_by(building_number=bn)
+    return results
+

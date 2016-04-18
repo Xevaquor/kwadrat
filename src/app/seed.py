@@ -19,6 +19,7 @@ AMOUNT_OF_OFFERS = 15
 
 pu = PasswordUtil()
 
+app.db.session.commit()
 app.db.drop_all()
 app.db.create_all()
 
@@ -68,5 +69,8 @@ for _ in range(AMOUNT_OF_OFFERS):
     app.db.session.add(offer)
 
 app.db.session.commit()
+
+results = Offer.query.filter_by(building_number=1).all()
+print('asd')
 
 
