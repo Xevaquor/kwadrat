@@ -1,10 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block body %}
+    <div id="search">
+        <form method="get">
+            <fieldset>
+                <ul>
+                    <li>
+                        <label for="room_count_enabled">Filtruj</label>
+                        <input id="room_count_enabled" name="room_count_enabled" type="checkbox"
+                        {% if params.room_count_enabled == 'on' %} checked {% endif %} >
+                        <label for="room_count_lower">Liczba pokoi od</label>
+                        <input id="room_count_lower" name="room_count_lower" type="number" min="1" step="1"
+                               title="Ilość pokoi np. 3" value="{{ params.room_count_lower }}">
+                        <label for="room_count_upper">Liczba pokoi do</label>
+                        <input id="room_count_upper" name="room_count_upper" type="number" min="1" step="1"
+                               title="Ilość pokoi np. 3" value="{{ params.room_count_upper }}">
+                    </li>
+                    <li>
+                        <label for="area">Powierzchnia m<sup>2</sup></label>
+                        <input id="area" name="area" type="number"  min="1" step="1"
+                               title="Wielkość w metrach kwadratowych">
+                    </li>
+                    <li>
+                        <label for="tier">Piętro (0 jeśli parter)</label>
+                        <input id="tier" name="tier" type="number"  min="0" step="1"
+                               title="Piętro (dla parteru prosze wpisać 0)">
+                    </li>
+                    <li>
+                        <label for="has_balcony">Balkon</label>
+                        <input id="has_balcony" name="has_balcony" type="checkbox" title="Balkon">
+                    </li>
+                    <li>
+                        <label for="description">Opis</label>
+                        <input id="description" name="description" type="text"  minlength="1" maxlength="6144"
+                               title="Opis">
+                    </li>
+                    <li>
+                        <label for="price">Cena (Złote Polskie)</label>
+                        <input id="price" name="price" type="number"  min="1" step="1"
+                               title="Cena w pelnych złotych">
+                    </li>
+                </ul>
+                <button type="submit">Wystaw ogłoszenie</button>
+            </fieldset>
+        </form>
+    </div>
+    <table>
+        <tbody>
+        {% for offer in offers %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ offer.city }}</td>
+                <td>{{ offer.street }}</td>
+                <td>{{ offer.building_number }}</td>
+                <td>{{ offer.apartment_number }}</td>
+                <td>{{ offer.room_count }}</td>
+                <td>{{ offer.area }}</td>
+                <td>{{ offer.tier }}</td>
+                <td>{{ offer.has_balcony }}</td>
+                <td>{{ offer.price }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

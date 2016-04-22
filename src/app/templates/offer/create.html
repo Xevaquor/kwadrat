@@ -1,17 +1,50 @@
-{% block content %}
-
-    <form action="" method="post" name="create_offer">
-        {{ form.hidden_tag() }}
-        <label>Ulica {{ form.street }}  </label>
-        <label>Nr domu {{ form.house_number }}  </label>
-        <label>Nr mieszkania {{ form.apartment_number }}  </label>
-        <label> {{ form.room_count }}  </label>
-        <label> {{ form.area }}  </label>
-        <label> {{ form.tier_count }}  </label>
-        <label> {{ form.has_balcony }}  </label>
-        <label> {{ form.description }}  </label>
-        <label> {{ form.price    }}  </label>
-        <label><input type="submit" value="Opublikuj"></label>
+{% extends 'layout.html' %}
+{% block body %}
+    <form method="post">
+        <fieldset>
+            <ul>
+                <li>
+                    <label for="city">Miasto</label>
+                    <input id="city" name="city" type="text" required minlength="1" maxlength="64" title="Miasto">
+                </li>
+                <li>
+                    <label for="street">Ulica</label>
+                    <input id="street" name="street" type="text" required minlength="1" maxlength="128" title="Ulica">
+                </li>
+                <li>
+                    <label for="building_number">Nr domu</label>
+                    <input id="building_number" name="building_number" type="text" required pattern="\d+[a-zA-Z]?" title="Nr domu (np. 17 lub 35c)">
+                </li>
+                <li>
+                    <label for="apartment_number">Nr mieszkania</label>
+                    <input id="apartment_number" name="apartment_number" type="number" min="1" title="Nr mieszkania np. 4" >
+                </li>
+                <li>
+                    <label for="room_count">Liczba pokoi</label>
+                    <input id="room_count" name="room_count" type="number" required min="1" step="1" title="Ilość pokoi np. 3" >
+                </li>
+                <li>
+                    <label for="area">Powierzchnia m<sup>2</sup></label>
+                    <input id="area" name="area" type="number" required min="1" step="1" title="Wielkość w metrach kwadratowych">
+                </li>
+                <li>
+                    <label for="tier">Piętro (0 jeśli parter)</label>
+                    <input id="tier" name="tier" type="number" required min="0" step="1" title="Piętro (dla parteru prosze wpisać 0)">
+                </li>
+                <li>
+                    <label for="has_balcony">Balkon</label>
+                    <input id="has_balcony" name="has_balcony" type="checkbox" title="Balkon">
+                </li>
+                <li>
+                    <label for="description">Opis</label>
+                    <input id="description" name="description" type="text" required minlength="1" maxlength="6144" title="Opis">
+                </li>
+                <li>
+                    <label for="price">Cena (Złote Polskie)</label>
+                    <input id="price" name="price" type="number" required min="1" step="1" title="Cena w pelnych złotych">
+                </li>
+            </ul>
+            <button type="submit">Wystaw ogłoszenie</button>
+        </fieldset>
     </form>
-
 {% endblock %}

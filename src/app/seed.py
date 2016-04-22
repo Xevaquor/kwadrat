@@ -13,9 +13,9 @@ import dateutil
 
 fake = Factory.create('pl_PL')
 
-AMOUNT_OF_USERS = 10
-AMOUNT_OF_MESSAGES = 20
-AMOUNT_OF_OFFERS = 15
+AMOUNT_OF_USERS = 40
+AMOUNT_OF_MESSAGES = 35
+AMOUNT_OF_OFFERS = 150
 
 pu = PasswordUtil()
 
@@ -52,7 +52,7 @@ for _ in range(AMOUNT_OF_OFFERS):
     offer = Offer()
     offer.apartment_number = random.randint(1, 500) if random.choice([True, False]) else None
     offer.area = random.randint(20,120)
-    offer.building_number = random.choice(['1', '18c'])
+    offer.building_number = random.choice(['1', '18c', '7', '48d', '32' '184', '234', '784', '42u'])
     offer.city = fake.city()
     offer.description = fake.paragraph()
     offer.has_balcony = random.choice([True, False])
@@ -63,7 +63,7 @@ for _ in range(AMOUNT_OF_OFFERS):
     offer.price = random.randint(1e5, 1e7)
     offer.room_count = random.randint(1, 7)
     offer.street = fake.street_name()
-    offer.tier_count = random.randint(1,3)
+    offer.tier = random.randint(1, 3)
     offer.utc_publish_date = datetime.datetime.now()
 
     app.db.session.add(offer)

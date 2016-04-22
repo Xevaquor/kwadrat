@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Offer</title>
-</head>
-<body>
-Offer index
-</body>
-</html>
+{% extends 'layout.html' %}
+{% block body %}
+    <table>
+        <tbody>
+        {% for offer in offers %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ offer.city }}</td>
+                <td>{{ offer.street }}</td>
+                <td>{{ offer.building_number }}</td>
+                <td>{{ offer.apartment_number }}</td>
+                <td>{{ offer.room_count }}</td>
+                <td>{{ offer.area }}</td>
+                <td>{{ offer.tier }}</td>
+                <td>{{ offer.has_balcony }}</td>
+                <td>{{ offer.price }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

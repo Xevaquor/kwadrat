@@ -4,7 +4,9 @@
 </head>
 <body>
 <header>
-    {% if 'username' in session %} Zalogowany jako {{ session.username }} {% endif %}
+    {% if 'username' in session %} Zalogowany jako {{ session.username }}
+    {% else %} Niezalogowany
+    {% endif %}
 </header>
 
 {% with messages = get_flashed_messages() %}

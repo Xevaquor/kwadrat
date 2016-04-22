@@ -1,5 +1,8 @@
 import re
 
+from app import db
+from app.model.user import User
+
 class ValidationError(object):
     def __init__(self, msg):
         self.message = msg
@@ -43,6 +46,17 @@ class EmailValidator(object):
         if not re.match(pattern, self.phone_func()):
             errors += {ValidationError("Nieporawny adres e-mail")}
         return errors,  len(errors) == 0
+
+class UniqueEmailValidator(object):
+    def __init__(self, email):
+        self.email_func = email
+
+    def validate(self):
+        existing_user = User.query.filter_by(email=self.email_func()).first()
+        if existing_user is None:
+            return [], True
+        else:
+            return [ValidationError('Użytkownik o podanym adresie e-mail już istnieje!')], False
 
 class CombinedValidator(object):
     def __init__(self, validators):

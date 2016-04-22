@@ -13,7 +13,7 @@ class Offer(db.Model):
     apartment_number = db.Column(db.Integer, nullable=True)
     room_count = db.Column(db.Integer, nullable=False)
     area = db.Column(db.Integer, nullable=False)
-    tier_count = db.Column(db.Integer, nullable=False)
+    tier = db.Column(db.Integer, nullable=False)
     has_balcony = db.Column(db.Boolean, nullable=False)
     description = db.Column(db.Unicode(16 * 1024), nullable=False)
     price = db.Column(db.Integer, nullable=False)
