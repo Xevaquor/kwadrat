@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for, abort
 
 from app.mod_offer.forms import CreateOfferForm
@@ -5,10 +7,13 @@ from app.mod_offer.forms import CreateOfferForm
 from app import db
 
 from app.model import offer
-from app.model.offer import Offer
+from app.model.offer import Offer, Photo
 from app.model.user import User
 from app.mod_auth.autorization_required import requires_sign_in
-from app.model.validator import ValidationError, CombinedValidator
+from app.model.validator import ValidationError, CombinedValidator, OfferValidator
+
+import uuid
+import os
 
 mod_offer = Blueprint('offer', __name__, url_prefix='/offer')
 
@@ -30,7 +35,54 @@ def index():
 
 @mod_offer.route('/', methods=['POST'])
 def create():
-    return '201'
+
+    offer = Offer()
+    offer.city = request.form['city']
+    offer.street = request.form['street']
+    offer.building_number = request.form['building_number']
+    offer.apartment_number = int(request.form['apartment_number'])
+    offer.room_count = int(request.form['room_count'])
+    offer.area = int(request.form['area'])
+    offer.tier = int(request.form['tier'])
+    offer.has_balcony = 'has_balcony' in request.form and request.form['has_balcony'] == 'on'
+    offer.description = request.form['description']
+    offer.price = int(request.form['price'])
+    offer.owner_id = session['user_id']
+    offer.utc_publish_date = datetime.datetime.now()
+    offer.is_sold = False
+
+    validator = OfferValidator(lambda: offer)
+
+    errors, valid = validator.validate()
+    if not valid:
+        for e in errors:
+            flash(e.message)
+        return redirect(url_for('offer.create_form'))
+
+    db.session.add(offer)
+    db.session.commit()
+
+    for fname in request.files:
+        file = request.files[fname]
+        if file.filename == '':
+            continue
+
+        _, ext = os.path.splitext(file.filename)
+        storename = uuid.uuid4().hex + ext
+        file.save('C:\\p\\put\\kwadrat\\src\\app\\static\\' + storename)
+
+        photo = Photo()
+        photo.offer_id = offer.id
+        photo.filename = storename
+
+        db.session.add(photo)
+
+    db.session.commit()
+
+    flash("Dodano ogłoszenie")
+
+    return redirect(url_for("offer.show_offer", offer_id=offer.id))
+
 
 
 @mod_offer.route('/create/', methods=['GET'])
@@ -39,12 +91,14 @@ def create_form():
     return render_template('offer/create.html')
 
 
-@mod_offer.route('/<int:offer_id>/', methods=['GET'])
+@mod_offer.route('/<int:offer_id>', methods=['GET'])
 def show_offer(offer_id=None):
-    if offer_id == 1:
+    offer = Offer.query.get(offer_id)
+    if offer is None:
         abort(404)
     else:
-        return render_template('offer/show.html')
+        return render_template('offer/show.html', offer=offer)
+
 
 
 def CreateFilter(param_name, param_desc, param_func, column):
@@ -106,6 +160,8 @@ class GenericFilter(object):
 #         if self.enabled:
 #             return query.filter(Offer.room_count.between(self.lower_val, self.upper_val))
 #         return query
+
+
 
 
 @mod_offer.route('/search/', methods=['GET'])

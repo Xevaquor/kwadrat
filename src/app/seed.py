@@ -35,6 +35,16 @@ for _ in range(AMOUNT_OF_USERS):
 
 app.db.session.commit()
 
+admin = User()
+admin.email = 'admin@admin.pl'
+admin.is_admin = True
+admin.salt = pu.generate_salt()
+admin.password = pu.hash_password('admin', admin.salt)
+admin.phone = '123654789'
+
+app.db.session.add(admin)
+app.db.session.commit()
+
 for _ in range(AMOUNT_OF_MESSAGES):
     msg = Message()
     msg.from_id = random.randint(1, AMOUNT_OF_USERS)
@@ -67,6 +77,16 @@ for _ in range(AMOUNT_OF_OFFERS):
     offer.utc_publish_date = datetime.datetime.now()
 
     app.db.session.add(offer)
+    app.db.session.commit()
+
+    p1 = Photo()
+    p1.filename = random.sample(['a.png', 'b.png', 'c.png'],1)[0]
+    p1.offer_id = offer.id
+    p2 = Photo()
+    p2.filename = random.sample(['a.png', 'b.png', 'c.png'],1)[0]
+    p2.offer_id = offer.id
+    app.db.session.add(p1)
+    app.db.session.add(p2)
 
 app.db.session.commit()
 

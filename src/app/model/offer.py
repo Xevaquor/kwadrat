@@ -22,6 +22,9 @@ class Offer(db.Model):
     utc_sold_date = db.Column(db.DateTime, nullable=True)
     is_sold = db.Column(db.Boolean, nullable=False)
 
+    photos = db.relationship('Photo', backref='from', lazy='dynamic', foreign_keys="Photo.offer_id",
+                                    cascade='save-update, merge, delete')
+
     @staticmethod
     def Create(owner_id, city, street, house_number, apartment_number, room_count,
                area, tier_count, has_balcony, description, price):
@@ -31,5 +34,4 @@ class Offer(db.Model):
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String, nullable=False)
-    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'), index=True)
-    is_main = db.Column(db.Boolean, nullable=False)
+    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'), index=True, nullable=False)

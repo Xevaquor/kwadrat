@@ -40,7 +40,7 @@
                                title="Cena w pelnych złotych">
                     </li>
                 </ul>
-                <button type="submit">Wystaw ogłoszenie</button>
+                <button type="submit">Szukaj!</button>
             </fieldset>
         </form>
     </div>
@@ -58,6 +58,7 @@
                 <td>{{ offer.tier }}</td>
                 <td>{{ offer.has_balcony }}</td>
                 <td>{{ offer.price }}</td>
+                <td><a href="{{ url_for('offer.show_offer', offer_id=offer.id) }}">Szczegóły</a></td>
             </tr>
         {% endfor %}
         </tbody>

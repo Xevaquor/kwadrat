@@ -70,3 +70,39 @@ class CombinedValidator(object):
         return errors,  len(errors) == 0
 
 
+class OfferValidator(object):
+    def __init__(self, offer):
+        self.offer_func = offer
+
+    def minmax(self, s, low):
+        if s is None or len(s) < low:
+            return True
+        return False
+
+    def validate(self):
+        errors = []
+        o = self.offer_func()
+        if self.minmax(o.city, 1):
+            errors += ["Niepoprawne miasto"]
+        if self.minmax(o.city, 1):
+            errors += ["Niepoprawna ulica"]
+        if self.minmax(o.building_number, 1):
+            errors += ["Niepoprawny nr budynku"]
+        if o.apartment_number < 1:
+            errors += ["Niepoprawny nr mieszkania"]
+        if o.room_count < 1:
+            errors += ["Niepoprawna liczba pokoi"]
+        if o.area < 1:
+            errors += ["Niepoprawna powierzchnia"]
+        if o.tier < 0:
+            errors += ["Niepoprawne piętro"]
+        if self.minmax(o.description, 1):
+            errors += ["Nieporpawny opis"]
+        if o.price < 1:
+            errors += ["Niepoprawna cena"]
+
+        return errors, len(errors) == 0
+
+
+
+

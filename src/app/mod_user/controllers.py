@@ -132,6 +132,7 @@ def sign_in_post():
     if signed_in:
         flash('Zalogowano jako ' + email)
         session['username'] = email
+        session['user_id'] = User.query.filter_by(email=email).first().id
         if 'next_url' in session:
             next_url = session['next_url']
             del session['next_url']
@@ -147,5 +148,6 @@ def sign_in_post():
 def sign_out():
     if 'username' in session:
         del session['username']
+        del session['user_id']
     flash('Wylogowano')
     return redirect(url_for('index'))

@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <form method="post">
+    <form method="post" action="{{ url_for('offer.index')}}" enctype=multipart/form-data>
         <fieldset>
             <ul>
                 <li>
@@ -42,6 +42,26 @@
                 <li>
                     <label for="price">Cena (Złote Polskie)</label>
                     <input id="price" name="price" type="number" required min="1" step="1" title="Cena w pelnych złotych">
+                </li>
+                <li>
+                    <label for="photos">Zdjęcie 1</label>
+                    <input id="photo1" name="photo1" type="file" title="Zdjęcie 1">
+                </li>
+                <li>
+                    <label for="photo2">Zdjęcie 2</label>
+                    <input id="photo2" name="photo2" type="file"   title="Zdjęcie2">
+                </li>
+                <li>
+                    <label for="photo3">Zdjęcie 3</label>
+                    <input id="photo3" name="photo3" type="file"   title="Zdjęcie3">
+                </li>
+                <li>
+                    <label for="photo4">Zdjęcie 4</label>
+                    <input id="photo4" name="photo4" type="file"   title="Zdjęcie4">
+                </li>
+                <li>
+                    <label for="photo5">Zdjęcie 5</label>
+                    <input id="photo5" name="photo5" type="file"   title="Zdjęcie5">
                 </li>
             </ul>
             <button type="submit">Wystaw ogłoszenie</button>

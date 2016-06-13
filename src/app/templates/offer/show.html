@@ -1,10 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Showing offer</title>
-</head>
-<body>
+{% extends 'layout.html' %}
+{% block body %}
+<div>
+    <p>Szczegóły oferty:</p>
+   {% for offer in offers %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ offer.city }}</td>
+                <td>{{ offer.street }}</td>
+                <td>{{ offer.building_number }}</td>
+                <td>{{ offer.apartment_number }}</td>
+                <td>{{ offer.room_count }}</td>
+                <td>{{ offer.area }}</td>
+                <td>{{ offer.tier }}</td>
+                <td>{{ offer.has_balcony }}</td>
+                <td>{{ offer.price }}</td>
+                <td><a href="{{ url_for('offer.show_offer', offer_id=offer.id) }}">Szczegóły</a></td>
+            </tr>
+        {% endfor %}
 
-</body>
-</html>
+    <p>Miasto: {{ offer.city }}</p>
+    <p>Ulica: {{ offer.street }}</p>
+    <p>Nr budynku: {{ offer.building_number }}</p>
+    <p>Nr mieszkania: {{ offer.apartment_number }}</p>
+    <p>Liczba pokoi: {{ offer.room_count }}</p>
+    <p>Powierzchnia: {{ offer.area }} m<sup>2</sup></p>
+    <p>Kodnygnacje: {{ offer.tier }}</p>
+    <p>Posiada balkon: {{ offer.has_balcony }}</p>
+    <p>Cena: {{ offer.price }}</p>
+
+    <div>
+        <p>Zdjęcia</p>
+
+        {% for photo in offer.photos %}
+            <img src="/static/{{ photo.filename }}">
+        {% endfor %}
+        <br>
+    </div>
+
+</div>
+{% endblock %}
