@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <table>
+        <tbody>
+        {% for offer in offers %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ offer.city }}</td>
+                <td>{{ offer.street }}</td>
+                <td>{{ offer.building_number }}</td>
+                <td>{{ offer.apartment_number }}</td>
+                <td>{{ offer.room_count }}</td>
+                <td>{{ offer.area }}</td>
+                <td>{{ offer.tier }}</td>
+                <td>{{ offer.has_balcony }}</td>
+                <td>{{ offer.price }}</td>
+                <td><a href="{{ url_for('offer.show_offer', offer_id=offer.id) }}">Szczegóły</a></td>
+                <td><form action="{{ url_for('offer.delete', offer_id=offer.id) }}" method="post">
+                    <button type="submit">Usuń</button>
+                </form>
+                </td>
+                <td>
+                    <a href="{{ url_for('offer.edit', offer_id=offer.id) }}">Edytuj</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

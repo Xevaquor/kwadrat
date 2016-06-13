@@ -1,12 +1,12 @@
 <!doctype html>
 <head>
 <title>My Application</title>
-    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 </head>
 <body>
 <header>
     {% if 'username' in session %} Zalogowany jako {{ session.username }} <form action="{{ url_for('user.sign_out')}}" method="post"><button type="submit">Wyloguj się</button> </form>
+        <a href="{{ url_for('offer.my_offers') }}">Moje oferty</a>
+        <a href="{{ url_for('offer.create_form') }}">Dodaj ofertę</a>
     {% else %} Niezalogowany <a href="{{ url_for('user.sign_in') }}">Zaloguj się</a> <a href="{{ url_for('user.sign_up') }}">Zarejestruj się</a>
     {% endif %}
 </header>
