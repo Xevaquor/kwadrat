@@ -1,63 +1,51 @@
 {% extends 'layout.html' %}
 {% block body %}
     <div>
+    <a href="{{ url_for('offer.search') }}">Powrót do wyszukiwania</a>
         {% if session['user_id'] == offer.owner_id %}
-            <p>To jest Twoja oferta</p>
+            <p class="alert alert-info" >To jest Twoja oferta</p>
             {% if  offer.is_sold %}
                 <p>Nieruchomość została już sprzedana</p>
             {% else %}
                 <form action="{{ url_for('offer.sold', offer_id=offer.id) }}" method="post">
-                    <button type="submit">Oznacz jako sprzedane</button>
+                    <button type="submit" class="btn btn-danger">Oznacz jako sprzedane</button>
                 </form>
             {% endif %}
-        {% else %}
+
+
+
+    {% else %}
             {% if already_requested %}
                 <p>Już zgłosiłeś chęć zakupu tej nieruchomości</p>
             {% else %}
                 <form action="{{ url_for('msg.want_buy', offer_id=offer.id) }}" method="post">
-                    <button type="submit">Chcę kupić!</button>
+                    <button type="submit" class="btn btn-success">Chcę kupić!</button>
                 </form>
             {% endif %}
         {% endif %}
 
-        <a href="{{ url_for('offer.search') }}">Powrót do wyszukiwania</a>
-        <p>Szczegóły oferty:</p>
-        {% for offer in offers %}
-            <tr>
-                <td>{{ loop.index }}</td>
-                <td>{{ offer.city }}</td>
-                <td>{{ offer.street }}</td>
-                <td>{{ offer.building_number }}</td>
-                <td>{{ offer.apartment_number }}</td>
-                <td>{{ offer.room_count }}</td>
-                <td>{{ offer.area }}</td>
-                <td>{{ offer.tier }}</td>
-                <td>{{ offer.has_balcony }}</td>
-                <td>{{ offer.price }}</td>
-                <td><a href="{{ url_for('offer.show_offer', offer_id=offer.id) }}">Szczegóły</a></td>
-            </tr>
-        {% endfor %}
+        <h1>Szczegóły oferty:</h1>
 
-        <p>Miasto: {{ offer.city }}</p>
-        <p>Ulica: {{ offer.street }}</p>
-        <p>Nr budynku: {{ offer.building_number }}</p>
-        <p>Nr mieszkania: {{ offer.apartment_number }}</p>
-        <p>Liczba pokoi: {{ offer.room_count }}</p>
-        <p>Powierzchnia: {{ offer.area }} m<sup>2</sup></p>
-        <p>Kodnygnacje: {{ offer.tier }}</p>
-        <p>Posiada balkon: {{ offer.has_balcony }}</p>
-        <p>Cena: {{ offer.price }}</p>
-    <p>Opis: {{ offer.description }}</p>
-
+        <dl class="dl-horizontal">
+        <dt>Miasto:    </dt><dd>{{ offer.city }}</dd>
+        <dt>Ulica:    </dt><dd>{{ offer.street }}</dd>
+        <dt>Nr budynku: </dt><dd>{{ offer.building_number }}</dd>
+        <dt>Nr mieszkania: </dt><dd>{{ offer.apartment_number }}</dd>
+        <dt>Liczba pokoi: </dt><dd>{{ offer.room_count }}</dd>
+        <dt>Powierzchnia: </dt><dd> {{offer.area }} m<sup>2</sup></dd>
+        <dt>Kodnygnacje:</dt><dd> {{ offer.tier }}</dd>
+        <dt>Posiada balkon: </dt><dd>{{ "TAK" if offer.has_balcony else "NIE"}}</dd>
+        <dt>Cena: </dt><dd> {{ offer.price }}zł</dd>
+        <dt>Opis: </dt><dd>{{ offer.description }}</dd>
+                                  </dl>
         <div>
-            <p>Zdjęcia</p>
+            <h2>Zdjęcia</h2>
 
-            {#
+
         {% for photo in offer.photos %}
-            <img src="/static/{{ photo.filename }}">
+            <img class="img-responsive" src="/static/{{ photo.filename }}">
         {% endfor %}
         <br>
-    #}
         </div>
 
     </div>

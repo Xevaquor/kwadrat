@@ -162,6 +162,7 @@ def sign_in_post():
         return redirect(url_for('user.sign_in'), code=303)
 
 
+
 @mod_user.route('/signout', methods=['POST'])
 def sign_out():
     if 'username' in session:

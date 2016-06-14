@@ -80,7 +80,7 @@ for _ in range(AMOUNT_OF_OFFERS):
     offer.price = random.randint(1e5, 1e7)
     offer.room_count = random.randint(1, 7)
     offer.street = fake.street_name()
-    offer.tier = random.randint(1, 3)
+    offer.tier = random.randint(0, 3)
     offer.utc_publish_date = datetime.datetime.now()
 
     app.db.session.add(offer)

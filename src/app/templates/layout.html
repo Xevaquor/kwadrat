@@ -1,4 +1,5 @@
 <!doctype html>
+<html>
 <head>
     <title>My Application</title>
     <!-- Latest compiled and minified CSS -->
@@ -8,11 +9,14 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
           integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
             crossorigin="anonymous"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <header>
@@ -21,9 +25,17 @@
             <div class="navbar-header">
                 {% if 'username' in session %}
                     <p class="navbar-brand"> Zalogowany jako {{ session.username }}</p>
+                    {% else %}
+                    <p class="navbar-brand"> Witaj niezalogowany</p>
                 {% endif %}
+
             </div>
             <ul class="nav navbar-nav">
+
+                {% if 'is_admin' in session and session['is_admin'] %}
+                    <li><a class="admin-title" href="{{ url_for('user.admin_index') }}">Panel Administratora</a></li>
+                {% endif %}
+
                 {% if 'username' in session %}
                     <li><a href="{{ url_for('offer.my') }}">Moje oferty</a></li>
                     <li><a href="{{ url_for('offer.create_form') }}">Wystaw ofertę</a></li>
@@ -31,53 +43,30 @@
                     {% if 'unread_messages' in session and session['unread_messages'] == 0 %}
                         <li><a href="{{ url_for('msg.index') }}">Wiadomości (0)</a></li>
                     {% else %}
-                        <li><a style="color: red" href="{{ url_for('msg.index') }}">Wiadomości ({{ session['unread_messages'] }})</a>
+                        <li><a class="new-messages" href="{{ url_for('msg.index') }}">Wiadomości ({{ session['unread_messages'] }})</a>
                         </li>
                     {% endif %}
-
+                {% else %}
+                    <li><a href="{{ url_for('user.sign_in') }}">Zaloguj się</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if 'username' in session %}
-                    <li>
+                    <li class="btn-link">
                         <form action="{{ url_for('user.sign_out') }}" method="post">
-                            <button class="btn-primary" type="submit">Wyloguj się</button>
+                            <button class="btn btn-link navbar-btn" type="submit">Wyloguj się</button>
                         </form>
                     </li>
+                {% else %}
+                    <li><a href="{{ url_for('user.sign_up') }}">Zarejestruj się</a></li>
                 {% endif %}
             </ul>
         </div>
     </nav>
 
-    {% if 'username' in session %} Zalogowany jako{{ session.username }}
-        <form action="{{ url_for('user.sign_out') }}" method="post">
-            <button type="submit">Wyloguj się</button>
-        </form>
-        <p><a href="{{ url_for('offer.my') }}">Moje oferty</a></p>
-        <p><a href="{{ url_for('offer.create_form') }}">Wystaw ofertę</a></p>
-    {% else %} Niezalogowany <a href="{{ url_for('user.sign_in') }}">Zaloguj się</a>
-        <a href="{{ url_for('user.sign_up') }}">Zarejestruj się</a>
-    {% endif %}
-
-    {% if 'username' in session %}
-        {% if 'unread_messages' in session and session['unread_messages'] == 0 %}
-            <p>Wiadomości (0) <a href="{{ url_for('msg.index') }}">(Sprawdź)</a></p>
-        {% else %}
-            <p>Wiadomości ({{ session['unread_messages'] }}) <a href="{{ url_for('msg.index') }}">(Sprawdź)</a>
-            </p>
-        {% endif %}
-    {% endif %}
-
-    <p>Ostatnio przeglądane:</p>
-    {% for d in session['recent'] %}
-        <a href="{{ url_for('offer.show_offer', offer_id=d.offer_id) }}">{{ d.city }} {{ d.street }} {{ d.price }}</a>
-    {% endfor %}
-
-    {% if 'is_admin' in session and session['is_admin'] %}
-        <a href="{{ url_for('user.admin_index') }}">Panel Administratora</a>
-    {% endif %}
 </header>
 
+<div id="page">
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
@@ -86,4 +75,16 @@
     {% endif %}
 {% endwith %}
 {% block body %}{% endblock %}
+
+{% if 'recent' in session %}
+<p>Ostatnio przeglądane oferty:</p>
+    <ul>
+    {% for d in session['recent'] %}
+        <li><a href="{{ url_for('offer.show_offer', offer_id=d.offer_id) }}">{{ d.city }}, {{ d.street }} za {{ d.price }}zł</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+</div>
 </body>
+</html>

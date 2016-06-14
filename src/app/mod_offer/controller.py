@@ -69,7 +69,7 @@ def create():
 
         _, ext = os.path.splitext(file.filename)
         storename = uuid.uuid4().hex + ext
-        file.save('C:\\p\\put\\kwadrat\\src\\app\\static\\' + storename)
+        file.save('C:\\code\\put\\kwadrat\\src\\app\\static\\' + storename)
 
         photo = Photo()
         photo.offer_id = offer.id

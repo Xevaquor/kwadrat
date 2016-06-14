@@ -1,70 +1,154 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <form method="post" action="{{ url_for('offer.index')}}" enctype=multipart/form-data>
-        <fieldset>
-            <ul>
-                <li>
-                    <label for="city">Miasto</label>
-                    <input id="city" name="city" type="text" required minlength="1" maxlength="64" title="Miasto">
-                </li>
-                <li>
-                    <label for="street">Ulica</label>
-                    <input id="street" name="street" type="text" required minlength="1" maxlength="128" title="Ulica">
-                </li>
-                <li>
-                    <label for="building_number">Nr domu</label>
-                    <input id="building_number" name="building_number" type="text" required pattern="\d+[a-zA-Z]?" title="Nr domu (np. 17 lub 35c)">
-                </li>
-                <li>
-                    <label for="apartment_number">Nr mieszkania</label>
-                    <input id="apartment_number" name="apartment_number" type="number" min="1" title="Nr mieszkania np. 4" >
-                </li>
-                <li>
-                    <label for="room_count">Liczba pokoi</label>
-                    <input id="room_count" name="room_count" type="number" required min="1" step="1" title="Ilość pokoi np. 3" >
-                </li>
-                <li>
-                    <label for="area">Powierzchnia m<sup>2</sup></label>
-                    <input id="area" name="area" type="number" required min="1" step="1" title="Wielkość w metrach kwadratowych">
-                </li>
-                <li>
-                    <label for="tier">Piętro (0 jeśli parter)</label>
-                    <input id="tier" name="tier" type="number" required min="0" step="1" title="Piętro (dla parteru prosze wpisać 0)">
-                </li>
-                <li>
-                    <label for="has_balcony">Balkon</label>
-                    <input id="has_balcony" name="has_balcony" type="checkbox" title="Balkon">
-                </li>
-                <li>
-                    <label for="description">Opis</label>
-                    <input id="description" name="description" type="text" required minlength="1" maxlength="6144" title="Opis">
-                </li>
-                <li>
-                    <label for="price">Cena (Złote Polskie)</label>
-                    <input id="price" name="price" type="number" required min="1" step="1" title="Cena w pelnych złotych">
-                </li>
-                <li>
-                    <label for="photos">Zdjęcie 1</label>
-                    <input id="photo1" name="photo1" type="file" title="Zdjęcie 1">
-                </li>
-                <li>
-                    <label for="photo2">Zdjęcie 2</label>
-                    <input id="photo2" name="photo2" type="file"   title="Zdjęcie2">
-                </li>
-                <li>
-                    <label for="photo3">Zdjęcie 3</label>
-                    <input id="photo3" name="photo3" type="file"   title="Zdjęcie3">
-                </li>
-                <li>
-                    <label for="photo4">Zdjęcie 4</label>
-                    <input id="photo4" name="photo4" type="file"   title="Zdjęcie4">
-                </li>
-                <li>
-                    <label for="photo5">Zdjęcie 5</label>
-                    <input id="photo5" name="photo5" type="file"   title="Zdjęcie5">
-                </li>
-            </ul>
-            <button type="submit">Wystaw ogłoszenie</button>
-        </fieldset>
+    <form method="post" action="{{ url_for('offer.index') }}"
+          enctype=multipart/form-data >
+
+        <div class="form-group">
+            <div>
+                <label class=col-sm-2 control-labelfor="city"
+                       class="col-sm-2 control-label">Miasto</label>
+
+                    <div class="col-sm-10"><input class="form-control"
+                                                  class="form-control" id="city"
+                                                  name="city" type="text"
+                                                  required minlength="1"
+                                                  maxlength="64" title="Miasto">
+                    </div>
+
+
+                <div>
+                    <label class=col-sm-2
+                           control-labelfor="street">Ulica</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="street" name="street"
+                                                  type="text" required
+                                                  minlength="1" maxlength="128"
+                                                  title="Ulica">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="building_number">Nr
+                        domu</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="building_number"
+                                                  name="building_number"
+                                                  type="text" required
+                                                  pattern="\d+[a-zA-Z]?"
+                                                  title="Nr domu (np. 17 lub 35c)">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="apartment_number">Nr
+                        mieszkania</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="apartment_number"
+                                                  name="apartment_number"
+                                                  type="number" min="1"
+                                                  title="Nr mieszkania np. 4">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="room_count">Liczba
+                        pokoi</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="room_count"
+                                                  name="room_count"
+                                                  type="number" required min="1"
+                                                  step="1"
+                                                  title="Ilość pokoi np. 3">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="area">Powierzchnia m<sup>2</sup></label>
+                    <div class="col-sm-10"><input class="form-control" id="area"
+                                                  name="area" type="number"
+                                                  required min="1" step="1"
+                                                  title="Wielkość w metrach kwadratowych">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="tier">Piętro (0
+                        jeśli parter)</label>
+                    <div class="col-sm-10"><input class="form-control" id="tier"
+                                                  name="tier" type="number"
+                                                  required min="0" step="1"
+                                                  title="Piętro (dla parteru prosze wpisać 0)">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2
+                           control-labelfor="has_balcony">Balkon</label>
+                    <input class="form-control"
+                                                  id="has_balcony"
+                                                  name="has_balcony"
+                                                  type="checkbox"
+                                                  title="Balkon">
+
+                </div>
+                <div>
+                    <label class=col-sm-2
+                           control-labelfor="description">Opis</label>
+                    <div class="col-sm-10"><textarea class="form-control"
+                                                  id="description"
+                                                  name="description" type="text"
+                                                  required minlength="1"
+                                                  maxlength="6144" title="Opis">
+                        </textarea>
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="price">Cena (Złote
+                        Polskie)</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="price" name="price"
+                                                  type="number" required min="1"
+                                                  step="1"
+                                                  title="Cena w pelnych złotych">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="photos">Zdjęcie
+                        1</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="photo1" name="photo1"
+                                                  type="file" title="Zdjęcie 1">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="photo2">Zdjęcie
+                        2</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="photo2" name="photo2"
+                                                  type="file" title="Zdjęcie2">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="photo3">Zdjęcie
+                        3</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="photo3" name="photo3"
+                                                  type="file" title="Zdjęcie3">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="photo4">Zdjęcie
+                        4</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="photo4" name="photo4"
+                                                  type="file" title="Zdjęcie4">
+                    </div>
+                </div>
+                <div>
+                    <label class=col-sm-2 control-labelfor="photo5">Zdjęcie
+                        5</label>
+                    <div class="col-sm-10"><input class="form-control"
+                                                  id="photo5" name="photo5"
+                                                  type="file" title="Zdjęcie5">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Wystaw ogłoszenie</button>
+
     </form>
 {% endblock %}

@@ -1,0 +1,17 @@
+#page {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.new-messages {
+    color: red !important;
+    font-weight: bold;
+}
+.admin-title {
+    font-weight: bold;
+}
+
+input,
+select,
+textarea {
+    max-width: 280px;
+}
