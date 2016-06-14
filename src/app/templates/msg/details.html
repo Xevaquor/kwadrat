@@ -3,8 +3,11 @@
 <article>
     {{ message.from.email }}
 <p>
-    {{ message.phone }}
+    {{ message.from.phone }}
 </p>
+    <p>
+        <a href="{{ url_for('offer.show_offer', offer_id=message.offer_id)}}">Przejdź do oferty</a>
+    </p>
         <form action="{{ url_for('msg.delete', id=message.id) }}" method="post">
         <button type="submit">USUŃ WIADOMOŚĆ</button>
     </form>

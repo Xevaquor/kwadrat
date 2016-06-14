@@ -1,11 +1,16 @@
 {% extends 'layout.html' %}
-{%   block body %}
+{% block body %}
 
-<article>
-    {% for msg in messages %}<p>
-    {% if not msg.is_read %}NEW{% endif %}
-    <a href="{{ url_for('msg.show',id=msg.id) }}" >{{ msg.sent_datetime }}  {{ msg.from.email }} {{ msg.from.phone }}</a></p>
-    {% endfor %}
-</article>
+    <article>
+        {% if messages | count == 0 %}
+            <p>Nie masz żadnych wiadomości</p>
+        {% else %}
+            {% for msg in messages %}<p>
+                {% if not msg.is_read %}NEW{% endif %}
+                <a href="{{ url_for('msg.show',id=msg.id) }}">{{ msg.sent_datetime }} {{ msg.from.email }} {{ msg.from.phone }}</a>
+            </p>
+            {% endfor %}
+        {% endif %}
+    </article>
 
 {% endblock %}

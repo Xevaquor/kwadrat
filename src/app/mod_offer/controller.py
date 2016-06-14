@@ -2,13 +2,14 @@ import datetime
 
 from flask import Blueprint, request, render_template, flash, g, session, redirect, url_for, abort
 
+from app.mod_msg.controllers import is_logged_in_as_specific_user_id
 from app.mod_offer.forms import CreateOfferForm
 
 from app import db
 
 from app.model import offer
 from app.model.offer import Offer, Photo
-from app.model.user import User
+from app.model.user import User, Message
 from app.mod_auth.autorization_required import requires_sign_in
 from app.model.validator import ValidationError, CombinedValidator, OfferValidator
 
@@ -35,7 +36,6 @@ def index():
 
 @mod_offer.route('/', methods=['POST'])
 def create():
-
     offer = Offer()
     offer.city = request.form['city']
     offer.street = request.form['street']
@@ -84,21 +84,40 @@ def create():
     return redirect(url_for("offer.show_offer", offer_id=offer.id))
 
 
-
 @mod_offer.route('/create/', methods=['GET'])
 @requires_sign_in()
 def create_form():
     return render_template('offer/create.html')
 
 
+def handle_recent(offer):
+    recent_ones = session['recent'] if 'recent' in session else []
+    for d in recent_ones:
+        if d['offer_id'] == offer.id:
+            return
+    current_one = {
+        'offer_id': offer.id,
+        'city': offer.city,
+        'street': offer.street,
+        'price': offer.price,
+    }
+    if len(recent_ones) >= 3:
+        recent_ones = recent_ones[1:]
+    recent_ones = [current_one] + recent_ones
+    session['recent'] = recent_ones
+
+
 @mod_offer.route('/<int:offer_id>', methods=['GET'])
 def show_offer(offer_id=None):
     offer = Offer.query.get(offer_id)
+    handle_recent(offer)
+
+    already_requested = 'user_id' in session and Message.query.filter_by(from_id=session['user_id'], offer_id=offer.id).first() is not None
+
     if offer is None:
         abort(404)
     else:
-        return render_template('offer/show.html', offer=offer)
-
+        return render_template('offer/show.html', offer=offer, already_requested=already_requested)
 
 
 def CreateFilter(param_name, param_desc, param_func, column):
@@ -187,3 +206,29 @@ def search():
 
     results = query.all()
     return render_template('offer/search.html', offers=results, params=params)
+
+
+@mod_offer.route('/my/', methods=['GET'])
+@requires_sign_in()
+def my():
+    offers = Offer.query.filter_by(owner_id=session['user_id'])
+    return render_template('offer/index.html', offers=offers)
+
+@mod_offer.route('/sold/<int:offer_id>', methods=['POST'])
+@requires_sign_in()
+def sold(offer_id):
+    offer = Offer.query.get(offer_id)
+    if offer is None:
+        abort(404)
+    if not is_logged_in_as_specific_user_id(offer.owner_id):
+        abort(403)
+    if offer.is_sold:
+        flash('Już sprzedałeś tą nieruchomość')
+        return redirect(url_for('offer.show_offer', offer_id=offer.id))
+
+    offer.is_sold = True
+    offer.utc_sold_date = datetime.datetime.now()
+    db.session.commit()
+
+    flash('Sprzedane!')
+    return redirect(url_for('offer.show_offer', offer_id=offer.id))

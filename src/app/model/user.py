@@ -11,7 +11,7 @@ class User(db.Model):
     phone = db.Column(db.Unicode(12), nullable=False)
     password = db.Column(db.Unicode(64), nullable=False)
     salt = db.Column(db.Unicode(255), nullable=False)
-    offers = db.relationship('Offer', backref='owner', lazy='select', cascade='save-update, merge, delete' )
+    offers = db.relationship('Offer', backref='owner', lazy='select', cascade='save-update, merge, delete, all, delete-orphan' )
     sent_messages = db.relationship('Message', backref='from', lazy='dynamic', foreign_keys="Message.from_id",
                                     cascade='save-update, merge, delete')
     received_messages = db.relationship('Message', backref='to', lazy='dynamic', foreign_keys="Message.to_id",
@@ -24,6 +24,7 @@ class Message(db.Model):
     to_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, index=True)
     is_read = db.Column(db.Boolean, nullable=False)
     sent_datetime = db.Column(db.DateTime, nullable=False)
+    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'), index=True, nullable=False)
 
     @staticmethod
     def Create(from_id, to_id, content):

@@ -14,7 +14,7 @@ import dateutil
 fake = Factory.create('pl_PL')
 
 AMOUNT_OF_USERS = 40
-AMOUNT_OF_MESSAGES = 35
+AMOUNT_OF_MESSAGES = 75
 AMOUNT_OF_OFFERS = 150
 
 pu = PasswordUtil()
@@ -45,23 +45,30 @@ admin.phone = '123654789'
 app.db.session.add(admin)
 app.db.session.commit()
 
-for _ in range(AMOUNT_OF_MESSAGES):
-    msg = Message()
-    msg.from_id = random.randint(1, AMOUNT_OF_USERS)
-    offset = random.randint(1, AMOUNT_OF_USERS-1)
-    msg.to_id = (msg.from_id + offset) % AMOUNT_OF_USERS + 1
-    msg.is_read = random.randint(0,1) % 2 == 0
-    msg.content = fake.paragraph()
-    msg.sent_datetime = datetime.datetime.now()
+p = User()
+p.email = 'p@p.pl'
+p.is_admin = False
+p.salt = pu.generate_salt()
+p.password = pu.hash_password('ppp', p.salt)
+p.phone = '123654789'
 
-    app.db.session.add(msg)
+app.db.session.add(p)
+app.db.session.commit()
 
+a = User()
+a.email = 'a@a.pl'
+a.is_admin = False
+a.salt = pu.generate_salt()
+a.password = pu.hash_password('aaa', a.salt)
+a.phone = '123654789'
+
+app.db.session.add(a)
 app.db.session.commit()
 
 for _ in range(AMOUNT_OF_OFFERS):
     offer = Offer()
     offer.apartment_number = random.randint(1, 500) if random.choice([True, False]) else None
-    offer.area = random.randint(20,120)
+    offer.area = random.randint(20, 120)
     offer.building_number = random.choice(['1', '18c', '7', '48d', '32' '184', '234', '784', '42u'])
     offer.city = fake.city()
     offer.description = fake.paragraph()
@@ -80,17 +87,29 @@ for _ in range(AMOUNT_OF_OFFERS):
     app.db.session.commit()
 
     p1 = Photo()
-    p1.filename = random.sample(['a.png', 'b.png', 'c.png'],1)[0]
+    p1.filename = random.sample(['a.png', 'b.png', 'c.png'], 1)[0]
     p1.offer_id = offer.id
     p2 = Photo()
-    p2.filename = random.sample(['a.png', 'b.png', 'c.png'],1)[0]
+    p2.filename = random.sample(['a.png', 'b.png', 'c.png'], 1)[0]
     p2.offer_id = offer.id
     app.db.session.add(p1)
     app.db.session.add(p2)
 
 app.db.session.commit()
 
+for _ in range(AMOUNT_OF_MESSAGES):
+    msg = Message()
+    msg.from_id = random.randint(1, AMOUNT_OF_USERS)
+    offset = random.randint(1, AMOUNT_OF_USERS - 1)
+    msg.to_id = p.id if _ % 10 == 0 else (msg.from_id + offset) % AMOUNT_OF_USERS + 1
+    msg.is_read = random.randint(0, 1) % 2 == 0
+    print(msg.to_id, p.id, msg.is_read)
+    msg.content = fake.paragraph()
+    msg.sent_datetime = datetime.datetime.now()
+    msg.offer_id = random.sample(range(AMOUNT_OF_OFFERS - 1), 1)[0] + 1
+
+    app.db.session.add(msg)
+
+app.db.session.commit()
 results = Offer.query.filter_by(building_number=1).all()
 print('asd')
-
-

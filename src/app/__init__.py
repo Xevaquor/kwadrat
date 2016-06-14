@@ -28,6 +28,8 @@ from app.mod_user.controllers import mod_user as user_module
 from app.mod_auth.controllers import mod_auth as auth_module
 from app.mod_msg.controllers import mod_msg as msg_module
 
+import app.mod_msg.controllers as mm
+
 app.register_blueprint(offer_module)
 app.register_blueprint(user_module)
 app.register_blueprint(auth_module)
@@ -40,4 +42,4 @@ env.globals['session'] = session
 
 @app.route('/')
 def index():
-    return redirect(url_for('offer.index'))
+    return redirect(url_for('offer.search'))
