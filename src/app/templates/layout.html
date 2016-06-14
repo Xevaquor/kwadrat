@@ -1,43 +1,89 @@
 <!doctype html>
 <head>
-<title>My Application</title>
-    <script src="https://rawgit.com/enyo/dropzone/master/dist/dropzone.js"></script>
-<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+    <title>My Application</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 <header>
-    {% if 'username' in session %} Zalogowany jako {{ session.username }} <form action="{{ url_for('user.sign_out')}}" method="post"><button type="submit">Wyloguj się</button> </form>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                {% if 'username' in session %}
+                    <p class="navbar-brand"> Zalogowany jako {{ session.username }}</p>
+                {% endif %}
+            </div>
+            <ul class="nav navbar-nav">
+                {% if 'username' in session %}
+                    <li><a href="{{ url_for('offer.my') }}">Moje oferty</a></li>
+                    <li><a href="{{ url_for('offer.create_form') }}">Wystaw ofertę</a></li>
+
+                    {% if 'unread_messages' in session and session['unread_messages'] == 0 %}
+                        <li><a href="{{ url_for('msg.index') }}">Wiadomości (0)</a></li>
+                    {% else %}
+                        <li><a style="color: red" href="{{ url_for('msg.index') }}">Wiadomości ({{ session['unread_messages'] }})</a>
+                        </li>
+                    {% endif %}
+
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if 'username' in session %}
+                    <li>
+                        <form action="{{ url_for('user.sign_out') }}" method="post">
+                            <button class="btn-primary" type="submit">Wyloguj się</button>
+                        </form>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% if 'username' in session %} Zalogowany jako{{ session.username }}
+        <form action="{{ url_for('user.sign_out') }}" method="post">
+            <button type="submit">Wyloguj się</button>
+        </form>
         <p><a href="{{ url_for('offer.my') }}">Moje oferty</a></p>
         <p><a href="{{ url_for('offer.create_form') }}">Wystaw ofertę</a></p>
-    {% else %} Niezalogowany <a href="{{ url_for('user.sign_in') }}">Zaloguj się</a> <a href="{{ url_for('user.sign_up') }}">Zarejestruj się</a>
+    {% else %} Niezalogowany <a href="{{ url_for('user.sign_in') }}">Zaloguj się</a>
+        <a href="{{ url_for('user.sign_up') }}">Zarejestruj się</a>
     {% endif %}
 
     {% if 'username' in session %}
         {% if 'unread_messages' in session and session['unread_messages'] == 0 %}
-            <p>Nie masz żadnych nieprzeczytanych wiadomości <a href="{{ url_for('msg.index') }}">(Sprawdź)</a></p>
+            <p>Wiadomości (0) <a href="{{ url_for('msg.index') }}">(Sprawdź)</a></p>
         {% else %}
-            <p>Masz ({{ session['unread_messages'] }}) nieprzeczytanych wiadomości <a href="{{ url_for('msg.index') }}">(Sprawdź)</a></p>
+            <p>Wiadomości ({{ session['unread_messages'] }}) <a href="{{ url_for('msg.index') }}">(Sprawdź)</a>
+            </p>
         {% endif %}
     {% endif %}
 
     <p>Ostatnio przeglądane:</p>
-{% for d in session['recent'] %}
-    <a href="{{ url_for('offer.show_offer', offer_id=d.offer_id) }}">{{ d.city }} {{ d.street }} {{ d.price }}</a>
-{% endfor %}
+    {% for d in session['recent'] %}
+        <a href="{{ url_for('offer.show_offer', offer_id=d.offer_id) }}">{{ d.city }} {{ d.street }} {{ d.price }}</a>
+    {% endfor %}
 
-{% if 'is_admin' in session and session['is_admin'] %}
-    <a href="{{ url_for('user.admin_index') }}">Panel Administratora</a>
-{% endif %}
+    {% if 'is_admin' in session and session['is_admin'] %}
+        <a href="{{ url_for('user.admin_index') }}">Panel Administratora</a>
+    {% endif %}
 </header>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert fade in {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
 {% endwith %}
 {% block body %}{% endblock %}
 </body>

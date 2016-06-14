@@ -69,7 +69,7 @@ def create():
 
         _, ext = os.path.splitext(file.filename)
         storename = uuid.uuid4().hex + ext
-        file.save('C:\\code\\put\\kwadrat\\src\\app\\static\\' + storename)
+        file.save('C:\\p\\put\\kwadrat\\src\\app\\static\\' + storename)
 
         photo = Photo()
         photo.offer_id = offer.id
@@ -109,15 +109,15 @@ def handle_recent(offer):
 
 @mod_offer.route('/<int:offer_id>', methods=['GET'])
 def show_offer(offer_id=None):
+
     offer = Offer.query.get(offer_id)
+    if offer is None:
+        abort(404)
     handle_recent(offer)
 
     already_requested = 'user_id' in session and Message.query.filter_by(from_id=session['user_id'], offer_id=offer.id).first() is not None
 
-    if offer is None:
-        abort(404)
-    else:
-        return render_template('offer/show.html', offer=offer, already_requested=already_requested)
+    return render_template('offer/show.html', offer=offer, already_requested=already_requested)
 
 
 def CreateFilter(param_name, param_desc, param_func, column):
@@ -191,6 +191,10 @@ def delete(offer_id):
     offer = Offer.query.get(offer_id)
     if offer.owner_id != session['user_id']:
         return 403
+
+    for p in offer.photos:
+        db.session.delete(p)
+    Message.query.filter_by(offer_id=offer.id).delete()
     db.session.delete(offer)
     db.session.commit()
     flash("Usunięto ofertę")

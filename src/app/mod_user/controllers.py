@@ -158,7 +158,7 @@ def sign_in_post():
         else:
             return redirect(url_for('index'))
     else:
-        flash('Niepoprawy email i/lub hasło', 'errorflash')
+        flash('Niepoprawy email i/lub hasło', 'alert-warning')
         return redirect(url_for('user.sign_in'), code=303)
 
 
