@@ -47,6 +47,7 @@
         <p>Kodnygnacje: {{ offer.tier }}</p>
         <p>Posiada balkon: {{ offer.has_balcony }}</p>
         <p>Cena: {{ offer.price }}</p>
+    <p>Opis: {{ offer.description }}</p>
 
         <div>
             <p>Zdjęcia</p>
@@ -60,4 +61,14 @@
         </div>
 
     </div>
+
+{% if offer.owner_id == session['user_id'] %}
+                <form action="{{ url_for('offer.delete', offer_id=offer.id) }}" method="post">
+                    <button type="submit">Usuń</button>
+                </form>
+
+                    <a href="{{ url_for('offer.edit', offer_id=offer.id) }}">Edytuj</a>
+{% endif %}
+
+</div>
 {% endblock %}

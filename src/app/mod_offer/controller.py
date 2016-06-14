@@ -69,7 +69,7 @@ def create():
 
         _, ext = os.path.splitext(file.filename)
         storename = uuid.uuid4().hex + ext
-        file.save('C:\\p\\put\\kwadrat\\src\\app\\static\\' + storename)
+        file.save('C:\\code\\put\\kwadrat\\src\\app\\static\\' + storename)
 
         photo = Photo()
         photo.offer_id = offer.id
@@ -180,7 +180,62 @@ class GenericFilter(object):
 #             return query.filter(Offer.room_count.between(self.lower_val, self.upper_val))
 #         return query
 
+@mod_offer.route('/my/',methods=['GET'])
+@requires_sign_in()
+def my_offers():
+    offers = Offer.query.filter_by(owner_id=session['user_id'])
+    return render_template('offer/my.html', offers=offers)
 
+@mod_offer.route('/delete/<int:offer_id>', methods=['POST'])
+def delete(offer_id):
+    offer = Offer.query.get(offer_id)
+    if offer.owner_id != session['user_id']:
+        return 403
+    db.session.delete(offer)
+    db.session.commit()
+    flash("Usunięto ofertę")
+    return redirect(url_for('offer.my_offers'))
+
+@mod_offer.route('/edit/<int:offer_id>', methods=['GET'])
+@requires_sign_in()
+def edit(offer_id):
+    offer = Offer.query.get(offer_id)
+    if offer.owner_id != session['user_id']:
+        return 403
+    return render_template('offer/edit.html', offer=offer)
+
+@mod_offer.route('/edit/<int:offer_id>', methods=['POST'])
+@requires_sign_in()
+def edit_post(offer_id):
+    offer = Offer.query.get(offer_id)
+    if offer.owner_id != session['user_id']:
+        return 403
+    offer.city = request.form['city']
+    offer.street = request.form['street']
+    offer.building_number = request.form['building_number']
+    offer.apartment_number = int(request.form['apartment_number'])
+    offer.room_count = int(request.form['room_count'])
+    offer.area = int(request.form['area'])
+    offer.tier = int(request.form['tier'])
+    offer.has_balcony = 'has_balcony' in request.form and request.form['has_balcony'] == 'on'
+    offer.description = request.form['description']
+    offer.price = int(request.form['price'])
+    offer.owner_id = session['user_id']
+    offer.utc_publish_date = datetime.datetime.now()
+    offer.is_sold = False
+
+    validator = OfferValidator(lambda: offer)
+
+    errors, valid = validator.validate()
+    if not valid:
+        for e in errors:
+            flash(e.message)
+        return redirect(url_for('offer.edit', offer_id=offer.id))
+
+    db.session.commit()
+    flash("Zaktualizowano ogłoszenie")
+
+    return redirect(url_for("offer.show_offer", offer_id=offer.id))
 
 
 @mod_offer.route('/search/', methods=['GET'])
