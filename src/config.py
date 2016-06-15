@@ -3,7 +3,7 @@ DEBUG = True
 import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-SQLALCHEMY_DATABASE_URI = 'postgresql+pg8000://postgres:root@localhost/ai'
+SQLALCHEMY_DATABASE_URI = 'postgresql+pg8000://root:rootroot@ai-db.cgtkfsh055iq.us-west-2.rds.amazonaws.com:5432/ai'
 DATABASE_CONNECT_OPTIONS = {}
 
 THREADS_PER_PAGE = 2
