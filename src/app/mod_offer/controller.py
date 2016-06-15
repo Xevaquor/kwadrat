@@ -28,7 +28,7 @@ def logged_user():
 
 @mod_offer.route('/', methods=['GET'])
 def index():
-    query = Offer.query.filter(Offer.is_sold == False).order_by(Offer.utc_publish_date.desc())
+    query = Offer.query.filter(Offer.is_sold == False).order_by(Offer.publish_date.desc())
 
     offers = query.all()
     return render_template('offer/index.html', offers=offers)
@@ -48,7 +48,7 @@ def create():
     offer.description = request.form['description']
     offer.price = int(request.form['price'])
     offer.owner_id = session['user_id']
-    offer.utc_publish_date = datetime.datetime.now()
+    offer.publish_date = datetime.datetime.now()
     offer.is_sold = False
 
     validator = OfferValidator(lambda: offer)
@@ -183,7 +183,7 @@ class GenericFilter(object):
 @mod_offer.route('/my/',methods=['GET'])
 @requires_sign_in()
 def my_offers():
-    offers = Offer.query.filter_by(owner_id=session['user_id'])
+    offers = Offer.query.filter_by(owner_id=session['user_id']).all()
     return render_template('offer/my.html', offers=offers)
 
 @mod_offer.route('/delete/<int:offer_id>', methods=['POST'])
@@ -225,7 +225,7 @@ def edit_post(offer_id):
     offer.description = request.form['description']
     offer.price = int(request.form['price'])
     offer.owner_id = session['user_id']
-    offer.utc_publish_date = datetime.datetime.now()
+    offer.publish_date = datetime.datetime.now()
     offer.is_sold = False
 
     validator = OfferValidator(lambda: offer)
@@ -286,7 +286,7 @@ def sold(offer_id):
         return redirect(url_for('offer.show_offer', offer_id=offer.id))
 
     offer.is_sold = True
-    offer.utc_sold_date = datetime.datetime.now()
+    offer.sold_date = datetime.datetime.now()
     db.session.commit()
 
     flash('Sprzedane!')

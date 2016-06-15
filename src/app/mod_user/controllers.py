@@ -151,12 +151,12 @@ def sign_in_post():
         session['user_id'] = User.query.filter_by(email=email).first().id
         session['unread_messages'] = get_unread_messages_count()
         session['is_admin'] = User.query.filter_by(email=email).first().is_admin
-        if 'next_url' in session and not session['is_admin']:
-            next_url = session['next_url']
-            del session['next_url']
-            return redirect(next_url, code=307)
-        else:
-            return redirect(url_for('index'))
+        # if 'next_url' in session and not session['is_admin']:
+        #     next_url = session['next_url']
+        #     del session['next_url']
+        #     return redirect(next_url, code=307)
+        # else:
+        return redirect(url_for('index'))
     else:
         flash('Niepoprawy email i/lub hasło', 'alert-warning')
         return redirect(url_for('user.sign_in'), code=303)
@@ -179,3 +179,40 @@ def sign_out():
 @requires_admin()
 def admin_index():
     return render_template('user/admin.html')
+
+@mod_user.route('/report', methods=['GET'])
+@requires_admin()
+def report():
+    month = 0
+    year = 0
+    try:
+        s = request.args['month'].split('-')
+        month = int(s[1])
+        year = int(s[0])
+
+        if not(( 0 < month <= 12) and (1900 < year < 2035)):
+            raise Exception()
+
+    except:
+        flash("Nieporawna data", "alert-danger")
+        return redirect(url_for('user.admin_index'))
+
+    offers = Offer.query.filter_by(is_sold=True).all()
+
+    price = 0
+    area = 0
+    for o in offers:
+        if o.sold_date.year == year and o.sold_date.month == month:
+            price += o.price
+            area += o.area
+
+    if len(offers) == 0:
+        flash("Nie sprzedano zadnych mieszkań w tym miesiącu :(", "alert-danger")
+        return redirect(url_for('user.admin_index'))
+
+    return render_template('user/report.html', count=len(offers),
+                           avg_price=price/len(offers),
+                           avg_area=area/len(offers),
+                           month=request.args['month'])
+
+
