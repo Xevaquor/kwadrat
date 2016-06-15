@@ -1,29 +1,31 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <table>
+    {% if offers | length > 0 %}
+    <table class="table table-striped table-condensed table-hover">
         <tbody>
         {% for offer in offers %}
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ offer.city }}</td>
-                <td>{{ offer.street }}</td>
-                <td>{{ offer.building_number }}</td>
-                <td>{{ offer.apartment_number }}</td>
-                <td>{{ offer.room_count }}</td>
-                <td>{{ offer.area }}</td>
-                <td>{{ offer.tier }}</td>
-                <td>{{ offer.has_balcony }}</td>
-                <td>{{ offer.price }}</td>
+                <td>{{ offer.street }} {{ offer.building_number }}
+                    {% if offer.apartment_number %}
+                    m. {{ offer.apartment_number }}
+                {% endif %}
+                <td>{{ offer.room_count }} pokoje</td>
+                <td>{{ offer.area }} m<sup>2</sup></td>
+            {% if offer.tier == 0 %}
+                <td>parter</td>
+            {% else %}
+                <td>{{ offer.tier }} piętro</td>
+            {% endif %}
+                <td>{{ "Balkon" if offer.has_balcony}}</td>
+                <td>{{ '{0:,}'.format(offer.price).replace(',', ' ') }} zł</td>
                 <td><a href="{{ url_for('offer.show_offer', offer_id=offer.id) }}">Szczegóły</a></td>
-                <td><form action="{{ url_for('offer.delete', offer_id=offer.id) }}" method="post">
-                    <button type="submit">Usuń</button>
-                </form>
-                </td>
-                <td>
-                    <a href="{{ url_for('offer.edit', offer_id=offer.id) }}">Edytuj</a>
-                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <h1>Nie masz żadnych wystawionych ofert</h1>
+    {% endif %}
 {% endblock %}

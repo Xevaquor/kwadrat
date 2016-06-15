@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 {%   block body %}
 
+    <h1>Lista użytkowników</h1>
+
 <article>
     {% for user in users %}
     <p>{{ user.email }} {{ user.phone }}

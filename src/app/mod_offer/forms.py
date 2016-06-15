@@ -14,8 +14,8 @@ from wtforms.validators import Required
 #     description = db.Column(db.Unicode(16 * 1024), nullable=False)
 #     price = db.Column(db.Integer, nullable=False)
 #
-#     utc_publish_date = db.Column(db.Date, nullable=False)
-#     utc_sold_date = db.Column(db.Date, nullable=True)
+#     publish_date = db.Column(db.Date, nullable=False)
+#     sold_date = db.Column(db.Date, nullable=True)
 #     is_sold = db.Column(db.Boolean, nullable=False)
 
 class CreateOfferForm(Form):

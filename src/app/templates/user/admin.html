@@ -5,4 +5,14 @@
     <h1>Panel administratora</h1>
 
     <a href="{{url_for('user.index')}}">Pokaż użytkowników</a>
+
+    <h2>Generuj raport</h2>
+  <p>Wybierz miesiąc i rok</p>
+  <form class="form-inline" role="form" action="{{ url_for('user.report') }}" method="get">
+    <div class="form-group">
+      <label for="month">Miesiąc</label>
+      <input type="month" class="form-control" id="month" name="month" required>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
 {% endblock %}

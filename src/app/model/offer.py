@@ -18,8 +18,8 @@ class Offer(db.Model):
     description = db.Column(db.Unicode(16 * 1024), nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
-    utc_publish_date = db.Column(db.DateTime, nullable=False)
-    utc_sold_date = db.Column(db.DateTime, nullable=True)
+    publish_date = db.Column(db.DateTime, nullable=False)
+    sold_date = db.Column(db.DateTime, nullable=True)
     is_sold = db.Column(db.Boolean, nullable=False)
 
     photos = db.relationship('Photo', backref='from', lazy='dynamic', foreign_keys="Photo.offer_id",
