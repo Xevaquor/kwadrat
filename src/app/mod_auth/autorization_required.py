@@ -24,7 +24,7 @@ def requires_sign_in():
                 return func(*args, **kwargs)
             flash('Nie jesteś zalogowany')
             session['next_url'] = request.url
-            return redirect(url_for('index'))
+            return redirect(url_for('user.sign_in'))
 
         return update_wrapper(authenticated, func)
 

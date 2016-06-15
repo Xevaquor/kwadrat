@@ -52,10 +52,10 @@
 
 {% if offer.owner_id == session['user_id'] %}
                 <form action="{{ url_for('offer.delete', offer_id=offer.id) }}" method="post">
-                    <button type="submit">Usuń</button>
+                    <button class="btn btn-danger" type="submit">Usuń</button>
                 </form>
 
-                    <a href="{{ url_for('offer.edit', offer_id=offer.id) }}">Edytuj</a>
+                    <a class="btn" href="{{ url_for('offer.edit', offer_id=offer.id) }}">Edytuj</a>
 {% endif %}
 
 </div>

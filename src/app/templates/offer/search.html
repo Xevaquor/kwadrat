@@ -16,34 +16,59 @@
                                title="Ilość pokoi np. 3" value="{{ params.room_count_upper }}">
                     </li>
                     <li>
-                        <label for="area">Powierzchnia m<sup>2</sup></label>
-                        <input id="area" name="area" type="number"  min="1" step="1"
-                               title="Wielkość w metrach kwadratowych">
+                    
+
+                        <label for="area_enabled">Filtruj</label>
+                        <input id="area_enabled" name="area_enabled" type="checkbox"
+                        {% if params.area_enabled == 'on' %} checked {% endif %} >
+                        <label for="area_lower">Powierzchnia od</label>
+                        <input id="area_lower" name="area_lower" type="number" min="1" step="1"
+                               title="Powierzchnia" value="{{ params.area_lower }}">
+                        <label for="area_upper">Powierzchnia do</label>
+                        <input id="area_upper" name="area_upper" type="number" min="1" step="1"
+                               title="Powierzchnia" value="{{ params.area_upper }}">
+
+
+                    
                     </li>
                     <li>
+                         <label for="tier_enabled">Filtruj</label>
+                        <input id="tier_enabled" name="tier_enabled" type="checkbox"
+                        {% if params.tier_enabled == 'on' %} checked {% endif %} >
                         <label for="tier">Piętro (0 jeśli parter)</label>
                         <input id="tier" name="tier" type="number"  min="0" step="1"
-                               title="Piętro (dla parteru prosze wpisać 0)">
+                               title="Piętro (dla parteru prosze wpisać 0)"
+                               value="{{ params.tier }}"
+                        >
                     </li>
                     <li>
+                        
+                         <label for="has_balcony_enabled">Filtruj</label>
+                        <input id="has_balcony_enabled" name="has_balcony_enabled" type="checkbox"
+                        {% if params.has_balcony_enabled == 'on' %} checked {% endif %} >
                         <label for="has_balcony">Balkon</label>
                         <input id="has_balcony" name="has_balcony" type="checkbox" title="Balkon">
                     </li>
+
                     <li>
-                        <label for="description">Opis</label>
-                        <input id="description" name="description" type="text"  minlength="1" maxlength="6144"
-                               title="Opis">
-                    </li>
-                    <li>
-                        <label for="price">Cena (Złote Polskie)</label>
-                        <input id="price" name="price" type="number"  min="1" step="1"
-                               title="Cena w pelnych złotych">
+                        
+                         <label for="price_enabled">Filtruj</label>
+                        <input id="price_enabled" name="price_enabled" type="checkbox"
+                        {% if params.price_enabled == 'on' %} checked {% endif %} >
+                        <label for="price_lower">Cena od</label>
+                        <input id="price_lower" name="price_lower" type="number" min="1" step="1"
+                               title="Cena" value="{{ params.price_lower }}">
+                        <label for="price_upper">Cena do</label>
+                        <input id="price_upper" name="price_upper" type="number" min="1" step="1"
+                               title="Cena" value="{{ params.price_upper }}">
+
                     </li>
                 </ul>
                 <button type="submit" class="btn btn-info">Szukaj!</button>
             </fieldset>
         </form>
     </div>
+    {% if offers %}
     <table class="table table-striped table-condensed table-hover">
         <tbody>
         {% for offer in offers %}
@@ -68,4 +93,7 @@
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <p class="alert alert-danger">Nie znaleziono nic, co spełniałoby podane kryteria :(</p>
+    {% endif %}
 {% endblock %}

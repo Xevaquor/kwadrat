@@ -79,7 +79,7 @@ def create():
 
     db.session.commit()
 
-    flash("Dodano ogłoszenie")
+    flash("Dodano ogłoszenie", "alert-success")
 
     return redirect(url_for("offer.show_offer", offer_id=offer.id))
 
@@ -123,6 +123,12 @@ def show_offer(offer_id=None):
 def CreateFilter(param_name, param_desc, param_func, column):
     return GenericFilter(param_func, param_name, param_desc, column)
 
+def CreateIntFilter(param_name, param_desc, param_func, column):
+    return IntFilter(param_func, param_name, param_desc, column)
+
+def CreateBoolFilter(param_name, param_desc, param_func, column):
+    return BoolFilter(param_func, param_name, param_desc, column)
+
 
 class GenericFilter(object):
     def __init__(self, params, param_name, param_desc, column):
@@ -153,6 +159,57 @@ class GenericFilter(object):
             return query.filter(self.column.between(self.lower_val, self.upper_val))
         return query
 
+
+
+class IntFilter(object):
+    def __init__(self, params, param_name, param_desc, column):
+        self.param_desc = param_desc
+        self.param_name = param_name
+        self.column = column
+        self.param_func = params
+
+    def validate(self):
+        params = self.param_func()
+        self.enabled = params.get(self.param_name + '_enabled', 'off') == 'on'
+        arg = params.get(self.param_name, '')
+
+        if not self.enabled:
+            return [], True
+
+        if arg.isdigit():
+            self.value = int(arg)
+            return [], True
+
+        return [ValidationError('Niepoprawna wartosć: ' + self.param_desc)], False
+
+    def filter(self, query):
+        if self.enabled and self.validate()[1]:
+            return query.filter(self.column == self.value)
+        return query
+
+class BoolFilter(object):
+    def __init__(self, params, param_name, param_desc, column):
+        self.param_desc = param_desc
+        self.param_name = param_name
+        self.column = column
+        self.param_func = params
+
+    def validate(self):
+        params = self.param_func()
+        self.enabled = params.get(self.param_name + '_enabled', 'off') == 'on'
+        arg = params.get(self.param_name, '')
+
+        if not self.enabled:
+            return [], True
+
+        self.value = arg == 'on'
+
+        return [], True
+
+    def filter(self, query):
+        if self.enabled and self.validate()[1]:
+            return query.filter(self.column == self.value)
+        return query
 
 # class RoomFilter(object):
 #     def __init__(self, params):
@@ -249,7 +306,11 @@ def search():
     query = Offer.query
 
     filters = [
-        CreateFilter('room_count', 'liczba pokoi', lambda: params, Offer.room_count)
+        CreateFilter('room_count', 'liczba pokoi', lambda: params, Offer.room_count),
+        CreateFilter('area', 'powierzchnia', lambda: params, Offer.area),
+        CreateFilter('price', 'cena', lambda: params, Offer.price),
+        CreateIntFilter('tier', 'piętro', lambda: params, Offer.tier),
+        CreateBoolFilter('has_balcony', 'balkon', lambda: params, Offer.has_balcony)
     ]
 
     validators = CombinedValidator(filters)
@@ -257,7 +318,7 @@ def search():
     errors, valid = validators.validate()
     if not valid:
         for e in errors:
-            flash(e.message, 'errorflash')
+            flash(e.message, 'alert-danger')
             return render_template('offer/search.html', params=params)
 
     for filter in filters:

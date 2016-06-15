@@ -6,16 +6,16 @@ from app.pass_utils import PasswordUtil
 import random
 import datetime
 import dateutil
-
-# import logging
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+import sys
+import logging
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 fake = Factory.create('pl_PL')
 
-AMOUNT_OF_USERS = 100
+AMOUNT_OF_USERS = 50
 AMOUNT_OF_MESSAGES = 180
-AMOUNT_OF_OFFERS = 450
+AMOUNT_OF_OFFERS = 100
 
 pu = PasswordUtil()
 
@@ -32,6 +32,7 @@ for _ in range(AMOUNT_OF_USERS):
     user.phone = '123654789'
 
     app.db.session.add(user)
+    print('.', end='')
 
 app.db.session.commit()
 
@@ -94,6 +95,8 @@ for _ in range(AMOUNT_OF_OFFERS):
     p2.offer_id = offer.id
     app.db.session.add(p1)
     app.db.session.add(p2)
+    print('.', end='')
+
 
 app.db.session.commit()
 
@@ -109,6 +112,8 @@ for _ in range(AMOUNT_OF_MESSAGES):
     msg.offer_id = random.sample(range(AMOUNT_OF_OFFERS - 1), 1)[0] + 1
 
     app.db.session.add(msg)
+    print('.', end='')
+
 
 app.db.session.commit()
 results = Offer.query.filter_by(building_number=1).all()
