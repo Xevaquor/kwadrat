@@ -88,7 +88,7 @@ class OfferValidator(object):
             errors += ["Niepoprawna ulica"]
         if self.minmax(o.building_number, 1):
             errors += ["Niepoprawny nr budynku"]
-        if o.apartment_number < 1:
+        if o.apartment_number is not None and o.apartment_number < 1:
             errors += ["Niepoprawny nr mieszkania"]
         if o.room_count < 1:
             errors += ["Niepoprawna liczba pokoi"]

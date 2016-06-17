@@ -40,7 +40,10 @@ def create():
     offer.city = request.form['city']
     offer.street = request.form['street']
     offer.building_number = request.form['building_number']
-    offer.apartment_number = int(request.form['apartment_number'])
+    try:
+        offer.apartment_number = int(request.form['apartment_number'])
+    except:
+        offer.apartment_nuber = None
     offer.room_count = int(request.form['room_count'])
     offer.area = int(request.form['area'])
     offer.tier = int(request.form['tier'])
@@ -69,7 +72,7 @@ def create():
 
         _, ext = os.path.splitext(file.filename)
         storename = uuid.uuid4().hex + ext
-        file.save('C:\\code\\put\\kwadrat\\src\\app\\static\\' + storename)
+        file.save('/home/ec2-user/kwadrat/src/app/static/' + storename)
 
         photo = Photo()
         photo.offer_id = offer.id
@@ -323,7 +326,9 @@ def search():
 
     for filter in filters:
         query = filter.filter(query)
-
+    
+    query = query.filter_by(is_sold=False)
+    
     results = query.all()
     return render_template('offer/search.html', offers=results, params=params)
 
