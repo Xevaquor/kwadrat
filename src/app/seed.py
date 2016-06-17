@@ -88,10 +88,10 @@ for _ in range(AMOUNT_OF_OFFERS):
     app.db.session.commit()
 
     p1 = Photo()
-    p1.filename = random.sample(['a.png', 'b.png', 'c.png'], 1)[0]
+    p1.filename = str(random.sample(range(8), 1)[0]) + ".jpg"
     p1.offer_id = offer.id
     p2 = Photo()
-    p2.filename = random.sample(['a.png', 'b.png', 'c.png'], 1)[0]
+    p2.filename = str(random.sample(range(8), 1)[0]) + ".jpg"
     p2.offer_id = offer.id
     app.db.session.add(p1)
     app.db.session.add(p2)

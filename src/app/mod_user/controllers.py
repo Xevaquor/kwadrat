@@ -201,18 +201,20 @@ def report():
 
     price = 0
     area = 0
+    oc = 0
     for o in offers:
         if o.sold_date.year == year and o.sold_date.month == month:
             price += o.price
             area += o.area
+            oc += 1
 
-    if len(offers) == 0:
+    if oc == 0:
         flash("Nie sprzedano zadnych mieszkań w tym miesiącu :(", "alert-danger")
         return redirect(url_for('user.admin_index'))
 
-    return render_template('user/report.html', count=len(offers),
-                           avg_price=price/len(offers),
-                           avg_area=area/len(offers),
+    return render_template('user/report.html', count=oc,
+                           avg_price=price/oc,
+                           avg_area=area/oc,
                            month=request.args['month'])
 
 

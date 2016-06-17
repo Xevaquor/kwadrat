@@ -23,7 +23,7 @@ class Offer(db.Model):
     is_sold = db.Column(db.Boolean, nullable=False)
 
     photos = db.relationship('Photo', backref='from', lazy='dynamic', foreign_keys="Photo.offer_id",
-                                    cascade='save-update, merge, delete, all, delete-orphan')
+                                    cascade='save-update, merge, delete')
 
     @staticmethod
     def Create(owner_id, city, street, house_number, apartment_number, room_count,
